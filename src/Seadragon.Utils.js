@@ -527,8 +527,12 @@ var SeadragonUtils = function() {
                 window.setTimeout(SeadragonUtils.createCallback(null, actual, req), 1);
             };
         }
-        
-        if (window.ActiveXObject) {
+        //This is for IE when doing cross domain
+        if ('XDomainRequest' in window && window.XDomainRequest !== null) {
+            req = new XDomainRequest();
+            req.status = 0;
+        }
+        else if (window.ActiveXObject) {
             for (var i = 0; i < arrActiveX.length; i++) {
                 try {
                     req = new ActiveXObject(arrActiveX[i]);
