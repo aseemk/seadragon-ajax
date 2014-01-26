@@ -39,7 +39,7 @@ Ajax prototypes! Check it out:
 
 [@iangilman]: https://github.com/iangilman
 
-http://thatcher.github.com/openseadragon/
+http://openseadragon.github.io/
 
 If you still choose to use this version of Seadragon Ajax, you can find open
 community support and discussion at:
