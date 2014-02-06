@@ -527,8 +527,22 @@ var SeadragonUtils = function() {
                 window.setTimeout(SeadragonUtils.createCallback(null, actual, req), 1);
             };
         }
-        
-        if (window.ActiveXObject) {
+        //This is for IE when doing cross domain
+        if ('XDomainRequest' in window && window.XDomainRequest !== null) {
+            req = new XDomainRequest();
+            req.timeout = 3000;
+            req.onload = function () {
+            };
+            req.onerror = function () {
+            };
+            req.ontimeout = function () {
+            };
+            // this also needs to be set
+            req.onprogress = function () {
+            };
+            req.status = 0;
+        }
+        else if (window.ActiveXObject) {
             for (var i = 0; i < arrActiveX.length; i++) {
                 try {
                     req = new ActiveXObject(arrActiveX[i]);
@@ -551,13 +565,21 @@ var SeadragonUtils = function() {
         }
         
         if (async) {
-            req.onreadystatechange = function() {
-                if (req.readyState == 4) {
-                    // prevent memory leaks by breaking circular reference now
-                    req.onreadystatechange = new Function();
+            if ('XDomainRequest' in window && window.XDomainRequest !== null) {
+                req.onload = function () {
+                    req.status = 200;
+                    req.onload = new Function();
                     callback();
-                }
-            };
+                };
+            } else {
+                req.onreadystatechange = function () {
+                    if (req.readyState == 4) {
+                        // prevent memory leaks by breaking circular reference now
+                        req.onreadystatechange = new Function();
+                        callback();
+                    }
+                };
+            }
         }
         
         try {
