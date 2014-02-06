@@ -530,6 +530,16 @@ var SeadragonUtils = function() {
         //This is for IE when doing cross domain
         if ('XDomainRequest' in window && window.XDomainRequest !== null) {
             req = new XDomainRequest();
+            req.timeout = 3000;
+            req.onload = function () {
+            };
+            req.onerror = function () {
+            };
+            req.ontimeout = function () {
+            };
+            // this also needs to be set
+            req.onprogress = function () {
+            };
             req.status = 0;
         }
         else if (window.ActiveXObject) {
